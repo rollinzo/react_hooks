@@ -48,6 +48,9 @@ export default function MyRouter() {
           <li>
             <Link to="/changeAppName">useContext to change appName</Link>
           </li>
+          <li>
+            <a href="https://github.com/rollinzo/react_hooks">This code on Github</a>
+          </li>
         </ul>
 
         <hr />
