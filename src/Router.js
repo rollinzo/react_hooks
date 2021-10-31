@@ -22,19 +22,19 @@ import ContextHook1 from "./ContextHook";
 
 export default function MyRouter() {
   const [appName, setAppName ] = useState("HooksApp");
-
+  const subdomain = "react_hooks";
   return (
     <AppInfo.Provider value={[appName, setAppName]}>
 
-    <Router>
+    <Router basename="/react_hooks">
       <div>
       <h1>{appName}</h1>
         <ul>
           <li>
-            <Link to="/">Home</Link>
+            <Link to={"/" + subdomain}>KDR's React Hooks Home</Link>
           </li>
           <li>
-            <Link to="/router">Router</Link>
+            <Link to=`/{subdomain}router`>Router</Link>
           </li>
           <li>
             <Link to="/useEffect1">useEffect() unconstrained</Link>
