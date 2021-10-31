@@ -43,7 +43,7 @@ export default function MyRouter() {
             <Link to="/useEffect2">useEffect() only fires for certain states</Link>
           </li>
           <li>
-            <Link to="/useEffect3">useEffect only fires if state change is displayed in component</Link>
+            <Link to="/useEffect3">Will useEffect() fire if the state is not used?</Link>
           </li>
           <li>
             <Link to="/changeAppName">useContext to change appName</Link>

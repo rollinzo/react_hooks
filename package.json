@@ -1,5 +1,6 @@
 {
   "name": "kdr_on_hooks",
+  "homepage": "https://kevinrollins.com/react_hooks/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
