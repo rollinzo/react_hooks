@@ -31,10 +31,10 @@ export default function MyRouter() {
       <h1>{appName}</h1>
         <ul>
           <li>
-            <Link to={"/" + subdomain}>KDR's React Hooks Home</Link>
+            <Link to="/">KDR's React Hooks Home</Link>
           </li>
           <li>
-            <Link to=`/{subdomain}router`>Router</Link>
+            <Link to="/router">Router</Link>
           </li>
           <li>
             <Link to="/useEffect1">useEffect() unconstrained</Link>
