@@ -11,6 +11,7 @@ import DescribeRouter from "./DescribeRouter";
 import { EffectHook1, EffectHook2, EffectHook3 } from "./EffectHook";
 import { AppInfo } from "./AppInfo";
 import ContextHook1 from "./ContextHook";
+import UseFetch from "./UseFetch";
 // This site has 3 pages, all of which are rendered
 // dynamically in the browser (not server rendered).
 //
@@ -49,6 +50,9 @@ export default function MyRouter() {
             <Link to="/changeAppName">useContext to change appName</Link>
           </li>
           <li>
+            <Link to="/useFetch1">Use FetchAPI to fetch some data</Link>
+          </li>
+          <li>
             <a href="https://github.com/rollinzo/react_hooks">This code on Github</a>
           </li>
         </ul>
@@ -80,6 +84,9 @@ export default function MyRouter() {
           </Route>
           <Route path="/changeAppName">
             <ContextHook1 />
+          </Route>
+          <Route path="/useFetch1">
+            <UseFetch />
           </Route>
         </Switch>
       </div>
