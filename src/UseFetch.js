@@ -1,16 +1,20 @@
-import React, { useState, useContext, useEffect } from "react"; // useContext may be unneeded
+import React, { useState, useEffect } from "react";
 
 export default function UseFetch() {
   const [users, setUsers] = useState([]); // empty state
   const [albums, setAlbums] = useState([]);
   const [selectUser, setSelectUser] = useState(null);
 
-  //   useEffect(() => {
-  //     if (selectUser && albums) {
-  //       console.log(`selectUser: ${selectUser}`);
-  //       console.log(`getMyAlbums(): ${getMyAlbums(selectUser)}`);
-  //     }
-  //   }, [selectUser]);
+
+
+
+
+    useEffect(() => {
+      if ((selectUser != null) && (albums.length > 0)) {
+        console.log(selectUser);
+
+      }
+    }, [selectUser]);
 
   useEffect(() => {
     // here we're creating variables in which will be used as resources to pull
@@ -46,38 +50,10 @@ export default function UseFetch() {
       });
   }, []); // don't fire useEffect every time data changes
 
-  // const MYJSX = () => {
-  //     //
-  //     return users.length > 0 ? <User username = {users[0]["username"]} /> : <div>No users available</div>;
-  // }
-
-  // const UserList = () => {
-  //     return ()
-  // }
-
-  //   Tried to use closure idea
-  //   function UserList() {
-  //     return (
-  //       <div>
-  //         {users.map((user) => (
-  //           // Without the `key`, React will fire a key warning
-  //           <User
-  //             onClick={(user) => {
-  //               return () => {
-  //                 setSelectUser(user);
-  //               };
-  //             }}
-  //             key={user.id}
-  //             username={user.username}
-  //           />
-  //         ))}
-  //       </div>
-  //     );
-  //   }
-
   //   Move click handler into <User /> as a prop
   //   Is this related to react stale closure issues?
-  function UserList() {
+  const UserList = () =>  {
+
     return (
       <div>
         {users.map((user) => (
@@ -85,7 +61,8 @@ export default function UseFetch() {
           <User
             handler={() => {
               setSelectUser(user);
-            }}
+              }
+           }
             // albums={getMyAlbums(user)}
             key={user.id}
             username={user.username}
@@ -95,33 +72,7 @@ export default function UseFetch() {
     );
   }
 
-  function getMyAlbums(user) {
-    const drillUserId = ({ myId: album }) => {
-      return album.id;
-    };
-    const predicate = (user) => {
-      return (album) => {
-        return user.id === drillUserId(album);
-      };
-    };
-    return albums.filter(predicate);
-  }
 
-  // BETTER EXAMPLE
-  // Douglas Crockford - JavaScript the good parts
-  // Might be related to React stale closure problem
-
-  //   var add_the_handlers = function (nodes) {
-  //     var helper = function (i) {
-  //       return function (e) {
-  //         alert(i);
-  //       };
-  //     };
-  //     var i;
-  //     for (i = 0; i < nodes.length; i += 1) {
-  //       nodes[i].onclick = helper(i);
-  //     }
-  //   };
 
   const DisplayUsers = () => {
     if (users.length > 0) {
@@ -136,23 +87,33 @@ export default function UseFetch() {
     return <>{selectUser ? <DisplayUserAlbums /> : <DisplayUsers />}</>;
   };
 
-  const DisplayUserAlbums = () => {
-    return (
-      <>
-        <div>User id: {selectUser.username}</div>
-        <button
-          onClick={() => {
-            setSelectUser(null);
-          }}
-        >
-          User list
-        </button>
-        {getMyAlbums().map((album) => {
-          return <Album key={album.id} name={album.name} />;
-        })}
-      </>
-    );
-  };
+const DisplayUserAlbums = () => {
+
+  const predicate = (user) => {
+    return (album) => {
+      // return user.id === drillUserId(album);
+      return user.id === album.userId;
+    };
+  }
+  let myAlbums = albums.filter(predicate(selectUser));
+  return (
+    <>
+     <div>User id: {selectUser.username}</div>
+
+     <h1>{myAlbums.length} Albums!</h1>
+     <button
+        onClick={() => {
+        setSelectUser(null);
+        }}> Back to User List
+     </button>
+     {myAlbums.map((album) => {
+         return <Album key={album.id} id ={album.id} title={album.title} />;
+       })}
+
+    </>);
+
+}
+
 
   return (
     <div>
@@ -160,7 +121,10 @@ export default function UseFetch() {
       <ToggleDisplay />
     </div>
   ); // end-user prompt)
-}
+} //END useFetch1 component
+
+
+
 
 function User(myProps) {
   return <div onClick={myProps.handler}>{myProps.username}</div>;
@@ -169,7 +133,7 @@ function User(myProps) {
 function Album(props) {
   return (
     <>
-      <div>Name: {props.name}</div>
+      <div>Name: {props.title}</div>
       <div>ID: {props.id}</div>
     </>
   );
