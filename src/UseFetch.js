@@ -6,13 +6,16 @@ export default function UseFetch() {
   const [selectUser, setSelectUser] = useState(null);
 
   useEffect(() => {
-    console.log(`selectUser: ${selectUser}`);
+    if (selectUser && albums) {
+      console.log(`selectUser: ${selectUser}`);
+      console.log(`getMyAlbums(): ${getMyAlbums(selectUser)}`);
+    }
   }, [selectUser]);
 
   useEffect(() => {
     // here we're creating variables in which will be used as resources to pull
     const url = "https://jsonplaceholder.typicode.com/"; // website resource
-    const resource = "users"; // metadata of specific resource ("users") to pull from
+    let resource = "users"; // metadata of specific resource ("users") to pull from
 
     // using fetch function to get the url and resource
     fetch(url + resource)
@@ -29,6 +32,17 @@ export default function UseFetch() {
       .catch((myError) => {
         console.log(myError);
       });
+
+    //   Get album info
+    resource = "albums";
+    fetch(url + resource)
+      .then((response) => response.json())
+      .then((json) => {
+        setAlbums(json);
+      })
+      .catch((myError) => {
+        console.log(myError);
+      });
   }, []); // don't fire useEffect every time data changes
 
   // const MYJSX = () => {
@@ -40,15 +54,38 @@ export default function UseFetch() {
   //     return ()
   // }
 
+  //   Tried to use closure idea
+  //   function UserList() {
+  //     return (
+  //       <div>
+  //         {users.map((user) => (
+  //           // Without the `key`, React will fire a key warning
+  //           <User
+  //             onClick={(user) => {
+  //               return () => {
+  //                 setSelectUser(user);
+  //               };
+  //             }}
+  //             key={user.id}
+  //             username={user.username}
+  //           />
+  //         ))}
+  //       </div>
+  //     );
+  //   }
+
+  //   Move click handler into <User /> as a prop
+  //   Is this related to react stale closure issues?
   function UserList() {
     return (
       <div>
         {users.map((user) => (
           // Without the `key`, React will fire a key warning
           <User
-            onClick={(user) => {
+            handler={() => {
               setSelectUser(user);
             }}
+            // albums={getMyAlbums(user)}
             key={user.id}
             username={user.username}
           />
@@ -56,6 +93,31 @@ export default function UseFetch() {
       </div>
     );
   }
+
+  function getMyAlbums(user) {
+    const predicate = (user) => {
+      return (album) => {
+        return user.id === album.id;
+      };
+    };
+    return albums.filter(predicate);
+  }
+
+  // BETTER EXAMPLE
+  // Douglas Crockford - JavaScript the good parts
+  // Might be related to React stale closure problem
+
+  //   var add_the_handlers = function (nodes) {
+  //     var helper = function (i) {
+  //       return function (e) {
+  //         alert(i);
+  //       };
+  //     };
+  //     var i;
+  //     for (i = 0; i < nodes.length; i += 1) {
+  //       nodes[i].onclick = helper(i);
+  //     }
+  //   };
 
   const DisplayUsers = () => {
     if (users.length > 0) {
@@ -81,6 +143,9 @@ export default function UseFetch() {
         >
           User list
         </button>
+        {getMyAlbums().map((album) => {
+          return <Album key={album.id} name={album.name} />;
+        })}
       </>
     );
   };
@@ -94,5 +159,14 @@ export default function UseFetch() {
 }
 
 function User(myProps) {
-  return <div>{myProps.username}</div>;
+  return <div onClick={myProps.handler}>{myProps.username}</div>;
+}
+
+function Album(props) {
+  return (
+    <>
+      <div>Name: {props.name}</div>
+      <div>ID: {props.id}</div>
+    </>
+  );
 }
