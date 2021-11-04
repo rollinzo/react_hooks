@@ -5,12 +5,12 @@ export default function UseFetch() {
   const [albums, setAlbums] = useState([]);
   const [selectUser, setSelectUser] = useState(null);
 
-  useEffect(() => {
-    if (selectUser && albums) {
-      console.log(`selectUser: ${selectUser}`);
-      console.log(`getMyAlbums(): ${getMyAlbums(selectUser)}`);
-    }
-  }, [selectUser]);
+  //   useEffect(() => {
+  //     if (selectUser && albums) {
+  //       console.log(`selectUser: ${selectUser}`);
+  //       console.log(`getMyAlbums(): ${getMyAlbums(selectUser)}`);
+  //     }
+  //   }, [selectUser]);
 
   useEffect(() => {
     // here we're creating variables in which will be used as resources to pull
@@ -39,6 +39,7 @@ export default function UseFetch() {
       .then((response) => response.json())
       .then((json) => {
         setAlbums(json);
+        console.log(albums);
       })
       .catch((myError) => {
         console.log(myError);
@@ -95,9 +96,12 @@ export default function UseFetch() {
   }
 
   function getMyAlbums(user) {
+    const drillUserId = ({ myId: album }) => {
+      return album.id;
+    };
     const predicate = (user) => {
       return (album) => {
-        return user.id === album.id;
+        return user.id === drillUserId(album);
       };
     };
     return albums.filter(predicate);
