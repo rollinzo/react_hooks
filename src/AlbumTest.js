@@ -47,4 +47,5 @@ const predicate = (user) => {
 //.load AlbumTest.js
 
 //use case for above:
-//albums.filter(predicate(aUser)(album))
+//myFilter = predicate(myUser)
+//albums.filter(myFilter)
